@@ -1,0 +1,131 @@
+@import "tailwindcss";
+
+:root {
+  --void: #0a0f1a;
+  --glass: rgba(255,255,255,0.08);
+  --line: #2a3441;
+  --accent: #00b4d8;
+  --gold: #f4a261;
+  --font-space-grotesk: var(--font-space-grotesk);
+  --font-inter: var(--font-inter);
+  --font-jetbrains: var(--font-jetbrains);
+}
+
+body {
+  font-family: var(--font-inter), system_ui, sans-serif;
+  background: var(--void);
+  color: #e8e6e1;
+}
+
+.font-display {
+  font-family: var(--font-space-grotesk), system_ui, sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.glass {
+  background: var(--glass);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--line);
+}
+
+.section {
+  scroll-margin-top: 80px;
+}
+
+.motion-frame {
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  box-shadow: 0 10px 30px -15px rgba(0,0,0,0.5);
+}
+
+.scroll-scrub {
+  position: sticky;
+  top: 120px;
+}
+
+.cinematic-bg {
+  background: linear-gradient(180deg, #0a0f1a 0%, #111827 100%);
+}
+
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0,180,216,0.15) 0%, transparent 70%);
+  animation: orb-drift 25s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+@keyframes orb-drift {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(30px, -40px); }
+}
+
+.film-perf {
+  background-image: 
+    linear-gradient(to right, #000 1px, transparent 1px),
+    linear-gradient(to left, #000 1px, transparent 1px);
+  background-size: 12px 100%;
+  background-position: 0 0, 100% 0;
+  background-repeat: no-repeat;
+}
+
+.motion-label {
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  background: rgba(0,0,0,0.6);
+  padding: 2px 8px;
+  border-radius: 4px;
+  border: 1px solid var(--line);
+}
+
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(to right, #00b4d8, #f4a261);
+  z-index: 50;
+  transition: width 0.1s ease;
+}
+
+.demo-card {
+  transition: transform 0.2s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.2s;
+}
+
+.demo-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+}
+
+.reduced-motion .motion-element {
+  animation: none !important;
+  transition: none !important;
+}
+
+.higgsfield-brand {
+  font-family: var(--font-space-grotesk), system_ui, sans-serif;
+  background: linear-gradient(90deg, #00b4d8, #f4a261);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 700;
+}
+
+/* Custom for the tall scrub demo area */
+.scrub-overlay {
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+#motion-canvas {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+
+#hero-video {
+  display: none;
+}
