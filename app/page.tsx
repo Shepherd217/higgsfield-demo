@@ -122,14 +122,14 @@ export default function HiggsfieldDemo() {
         endPlane.position.set(3, 0, 1);
         scene.add(endPlane);
 
-        // Subtle cinematic particles as environmental motion only (not the subject).
-        const count = 600;
+        // Minimal atmospheric particles ONLY as background mist — heavily reduced so the guy + truck from the Imagine frames are the clear hero (not particles, not blurry mess).
+        const count = 30;
         const positions = new Float32Array(count * 3);
         const colors = new Float32Array(count * 3);
         for (let i = 0; i < count * 3; i += 3) {
-          positions[i] = (Math.random() - 0.5) * 12;
-          positions[i + 1] = (Math.random() - 0.5) * 8 - 1;
-          positions[i + 2] = (Math.random() - 0.5) * 6;
+          positions[i] = (Math.random() - 0.5) * 14;
+          positions[i + 1] = (Math.random() - 0.5) * 9 - 1;
+          positions[i + 2] = (Math.random() - 0.5) * 7;
           colors[i] = 0.8;
           colors[i + 1] = 0.95;
           colors[i + 2] = 1;
@@ -138,9 +138,9 @@ export default function HiggsfieldDemo() {
         pGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
         pGeo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
         const pMat = new THREE.PointsMaterial({
-          size: 0.025,
+          size: 0.012,
           transparent: true,
-          opacity: 0.35,
+          opacity: 0.06,
           vertexColors: true,
           blending: THREE.AdditiveBlending,
           depthWrite: false,
@@ -205,41 +205,49 @@ export default function HiggsfieldDemo() {
 
         if (videoTex) videoTex.needsUpdate = true;
 
-        // Main videoPlane: the "video that you play by scrolling" — large, centered, the Higgsfield generated transition is the core.
+        // Main videoPlane: the "video that you play by scrolling" — the generated transition is the core. Made much larger to fill view and reduce perceived blur.
         if (videoPlane) {
           videoPlane.rotation.y = 0;
           videoPlane.rotation.x = 0;
           videoPlane.position.set(0, 0, 0);
-          videoPlane.scale.setScalar(2.8);
+          videoPlane.scale.setScalar(5.0);
         }
 
-        // StartPlane: wide lake + truck, prominent at low prog.
+        // StartPlane: wide lake + truck, prominent at low prog (fades out).
         if (startPlane) {
-          startPlane.position.set(-5, 0, -1.5);
-          startPlane.rotation.y = -0.2;
-          (startPlane.material as THREE.MeshBasicMaterial).opacity = 0.95 * (1 - prog * 0.7);
-          startPlane.scale.setScalar(1.6);
+          startPlane.position.set(-6, 0, -2);
+          startPlane.rotation.y = -0.25;
+          (startPlane.material as THREE.MeshBasicMaterial).opacity = 0.9 * (1 - prog * 0.8);
+          startPlane.scale.setScalar(2.2);
         }
 
-        // EndPlane: the end frame (guy + truck close) — this is where the photographic content "comes through".
+        // EndPlane: the end frame (guy + truck close) — this is where the photographic content MUST come through clearly. Centered + large at high prog.
         if (endPlane) {
-          endPlane.position.set(5, 0, -1.5);
-          endPlane.rotation.y = 0.2;
-          (endPlane.material as THREE.MeshBasicMaterial).opacity = 0.95 * (0.3 + prog * 0.7);
-          endPlane.scale.setScalar(1.6);
+          if (prog > 0.55) {
+            // At the end of the scroll, slam the guy + truck frame to center and large so it is undeniable.
+            endPlane.position.set(0, 0, 0);
+            endPlane.rotation.y = 0;
+            (endPlane.material as THREE.MeshBasicMaterial).opacity = 0.98;
+            endPlane.scale.setScalar(4.2);
+          } else {
+            endPlane.position.set(6, 0, -2);
+            endPlane.rotation.y = 0.25;
+            (endPlane.material as THREE.MeshBasicMaterial).opacity = 0.9 * (0.2 + prog * 0.8);
+            endPlane.scale.setScalar(2.2);
+          }
         }
 
-        // Particles: very subtle background mist only.
+        // Particles: very minimal background mist only (almost invisible now).
         if (particles) {
-          particles.position.set(0, 0, -4);
-          particles.rotation.y = prog * 0.1;
-          particles.scale.setScalar(2);
+          particles.position.set(0, 0, -12);
+          particles.rotation.y = prog * 0.05;
+          particles.scale.setScalar(1);
         }
 
-        // Camera: cinematic dolly/pan driven by scroll progress + mouse (igloo.inc + bonsaixbt style).
-        camera.position.x = (prog - 0.5) * 5 + mouse.mx * 0.4;
-        camera.position.y = (prog - 0.5) * 1.5 + mouse.my * 0.3;
-        camera.position.z = 5.5 - prog * 2.2; // Dolly in as you scroll.
+        // Camera: tuned to keep the content (video transition + guy/truck end frame) large and centered in frame as you scroll. Less extreme movement so the photographic parts aren't lost at the edges.
+        camera.position.x = (prog - 0.5) * 2.5 + mouse.mx * 0.3;
+        camera.position.y = (prog - 0.5) * 0.8 + mouse.my * 0.2;
+        camera.position.z = 7.0 - prog * 3.5; // Start wider, dolly in to fill with the guy + truck at the end.
         camera.lookAt(0, 0, 0);
 
         renderer.render(three.scene, camera);
