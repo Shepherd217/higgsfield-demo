@@ -395,7 +395,7 @@ export default function HiggsfieldDemo() {
         <div className="max-w-5xl mx-auto px-6 text-center relative z-10">
           <div className="inline-flex items-center gap-2 px-4 py-1 rounded-full border border-[#2a3441] text-xs tracking-[2px] mb-6">
             <span className="w-2 h-2 bg-[#00b4d8] rounded-full animate-pulse" />
-            POWERED BY YOUR HIGGSFIELD BOOKMARKS + OPEN CLONES
+            POWERED BY YOUR HIGGSFIELD BOOKMARKS + OPEN CLONES • GIT-LINKED DEPLOY
           </div>
 
           <h1 className="text-7xl md:text-8xl font-semibold tracking-tighter leading-none mb-4 font-display">
